@@ -1,47 +1,42 @@
 // "use client";
 // import { useSession  } from "next-auth/react";
-import { getSession } from "next-auth/react";
+// import { getSession } from "next-auth";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+// import UserInfo from "@/components/UserInfo";
 
-
-const PostData = ({ posts }) => {
-
-  return (
-    <div>
-      <h1>Posts</h1>
-      <ul>
-        {posts}
-      </ul>
-    </div>
-  );
-};
-
-export async function getServerSideProps(context) {
-  const ss= await getServerSession(authOptions)
-
-  const session = await getServerSession(context.req, context.res,authOptions);
-  // const ss=JSON.stringify(session, null, 2)
-  console.log(ss);
-  if (session){
-    const email = session.user.email;
-    console.log(email, "from session");
-  }
-  const response = await fetch("https://congenial-capybara-grx69vqpxw62p9w7-3000.app.github.dev/api/post", {
+async function getPost(){
+  const session = await getServerSession(authOptions)
+  // const {email} = session.user.email
+  if (session) {
+    // console.log(session,"from post page")
+    // console.log(session.user.email,"from post page")
+    const data = { 'email': session.user.email };
+    // console.log(data);
+  const response = await fetch("http://localhost:3000/api/post", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: 'include',
-  });
+    body: JSON.stringify(data),
+    });
   const posts = await response.json();
-  console.log(posts)
-  // Pass data to component as props
-  return {
-    props: {
-      posts,
-    },
-  };
+  console.log(typeof posts);
+  return posts
+}
 }
 
-export default PostData;
+export default async function PostData() {
+  const data = await getPost()
+  console.log(typeof data,data,"in dashboard");
+return (
+  <ul>
+  {Object.entries(data.post).map(([key, value]) => (
+    <li key={key}>
+      {key}: {value.toString()}
+    </li>
+  ))}
+</ul>
+)
+}
+

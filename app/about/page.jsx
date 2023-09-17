@@ -1,15 +1,17 @@
 'use client';
 import React, { useState } from "react";
 import { ConfigProvider, Card, Steps } from "antd";
-import { Input, Space, Button } from "antd";
+import { Input, Space, Menu, theme, Layout } from "antd";
 const { Search } = Input;
 import { Col, Row } from 'antd';
-import { CheckCircleFilled, SyncOutlined, AliwangwangOutlined }from '@ant-design/icons';
+import { CheckCircleFilled, SyncOutlined, AliwangwangOutlined } from '@ant-design/icons';
+import UserIcon from "@/components/UserIcon";
+const { Header, Content, Footer } = Layout;
 
 
 const onSearch = (value, _e, info) => console.log(info?.source, value);
 
-const myObject = 
+const myObject =
 {
   Engage: {
     Kickoff: true,
@@ -78,90 +80,129 @@ const About = () => {
 
   return (
     <>
-      <Space.Compact block className="self-center flex justify-center p-4">
-        <ConfigProvider
-          theme={{
-            token: {
-              colorPrimaryHover: "black",
-            },
-          }}
-        >
-          <Input.Search allowClear enterButton className="text-white hover:text-white focus:text-white font-extralight w-96  rounded-md border bg-black hover:bg-gray-800 focus:bg-gray-700 border-black" placeholder="Order ID" onSearch={onSearch} />
-        </ConfigProvider>
-        {/* <Button type="primary" className="bg-blue-600">Submit</Button> */}
-      </Space.Compact>
-      <Row className="p-4 border-0 border-red-400 flex m-4">
-        <Col className="border-0">
-          <ConfigProvider
-            theme={{
-              token: {
-                colorPrimary: "#48bb78",
-                lineWidth:2,
-                motionDurationSlow:"0.4s",
-              },
-            }}
-          >
-            <Steps
-              direction="vertical"
-              current={current}
-              onChange={onChange}
-              items={steps.map((item) => ({
-                key: item.title,
-                title: item.title,
-                status: item.status,
-                description: `${item.subTitle}%`
+      <Layout>
+        <Header className="bg-black sticky top-0 z-40 w-full flex justify-between items-center">
+          <div className="demo-logo text-white text-lg font-semibold">
+            <a href="/">
+              BEC
+            </a>
+          </div>
+          <div className="flex mr-4">
+            <Menu className="mr-4"
+              theme="dark"
+              mode="horizontal"
+              defaultSelectedKeys={['2']}
+              items={new Array(3).fill(null).map((_, index) => ({
+                key: String(index + 1),
+                label: `nav ${index + 1}`,
               }))}
-              status={steps[current].status}
             />
-          </ConfigProvider>
+            <UserIcon />
+          </div>
 
-        </Col>
-        <Col className="flex flex-col items-start border-0">
-
-
-        {steps[current].subTitle === 100 ? (
-        
-        <span className="block text-lg border rounded-lg ml-4 mb-6 font-semibold p-2">
-        Stage Complete
-        <CheckCircleFilled className="ml-2 text-green-500"/>
-        </span>
-      ) : steps[current].subTitle > 0 && steps[current].subTitle < 100 ? (
-        
-        <span className="block text-lg border rounded-lg ml-4 mb-6 font-semibold p-2">
-        In Progress
-        <SyncOutlined spin className="ml-2 text-blue-500"/>
-        </span>
-      ) : (
-        <span className="block text-lg border rounded-lg ml-4 mb-6 font-semibold p-2">
-        Scheduled
-        <AliwangwangOutlined style={{ fontSize: '32px' }} className="ml-2 text-red-500"/>
-        </span>      
-        )}
-
-
-            {typeof steps[current].content === "object" && steps[current].content !== null ? (
+        </Header>
+        <Content className="pl-4 pr-4 mt-8">
+          <div className="">
+            <Space.Compact block className="self-center flex mb-4 justify-center">
               <ConfigProvider
                 theme={{
                   token: {
-                    colorPrimary: "#48bb78",
+                    colorPrimaryHover: "black",
                   },
                 }}
               >
-                <Steps className="border-0"
-                  direction="horizontal"
-                  progressDot
-                  size="small"
-                  current={current}
-                  items={steps[current].inside}
-                  status={steps[current].status}
-                />
+                <Input.Search allowClear enterButton className="text-white hover:text-white focus:text-white font-extralight w-96  rounded-md border bg-black hover:bg-gray-800 focus:bg-gray-700 border-black" placeholder="Order ID" onSearch={onSearch} />
               </ConfigProvider>
+              {/* <Button type="primary" className="bg-blue-600">Submit</Button> */}
+            </Space.Compact>
+            <Row className="border-0 border-red-400 flex">
+              <Col className="border-0 m-4">
+                <ConfigProvider
+                  theme={{
+                    token: {
+                      colorPrimary: "#48bb78",
+                      lineWidth: 2,
+                      motionDurationSlow: "0.4s",
+                    },
+                  }}
+                >
+                  <Steps
+                    direction="vertical"
+                    current={current}
+                    onChange={onChange}
+                    items={steps.map((item) => ({
+                      key: item.title,
+                      title: item.title,
+                      status: item.status,
+                      description: `${item.subTitle}%`
+                    }))}
+                    status={steps[current].status}
+                  />
+                </ConfigProvider>
 
-            ) : (
-              steps[current].content.toString()
-            )}
-        </Col>
-      </Row>
+              </Col>
+              <Col className="flex flex-col m-4 items-start border-0">
+
+
+                {steps[current].subTitle === 100 ? (
+
+                  <span className="block text-md border rounded-lg ml-4 mb-6 font-semibold p-2">
+                    <span className="font-mono font-semibold">
+                      {steps[current].title}
+                    </span> 
+                    <CheckCircleFilled className="ml-2 text-green-500" />
+                  </span>
+                ) : steps[current].subTitle > 0 && steps[current].subTitle < 100 ? (
+
+                  <span className="block text-md border rounded-lg ml-4 mb-6 font-semibold p-2">
+                    <span className="font-mono font-semibold">
+                      {steps[current].title}
+                    </span> 
+                    <SyncOutlined spin className="ml-2 text-blue-500" />
+                  </span>
+                ) : (
+                  <span className="block text-md border rounded-lg ml-4 mb-6 font-semibold p-2">
+                    <span className="font-mono font-semibold">
+                      {steps[current].title}
+                    </span> 
+                    <AliwangwangOutlined style={{ fontSize: '18px' }} className="ml-2 text-red-500" />
+                  </span>
+                )}
+
+
+                {typeof steps[current].content === "object" && steps[current].content !== null ? (
+                  <ConfigProvider
+                    theme={{
+                      token: {
+                        colorPrimary: "#48bb78",
+                      },
+                    }}
+                  >
+                    <Steps className="border-0"
+                      direction="horizontal"
+                      progressDot
+                      size="small"
+                      current={current}
+                      items={steps[current].inside}
+                      status={steps[current].status}
+                    />
+                  </ConfigProvider>
+
+                ) : (
+                  steps[current].content.toString()
+                )}
+              </Col>
+            </Row>
+          </div>
+        </Content>
+        <Footer
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          Ant Design ©2023 Created by Ant UED
+        </Footer>
+      </Layout>
 
     </>
 

@@ -20,6 +20,7 @@ export async function POST(req) {
     const postsCollection = db.collection('posts');
 
     await postsCollection.insertOne({
+      data:{
       Engage: {
             Kickoff: true,
             "Scoping call": true,
@@ -34,7 +35,8 @@ export async function POST(req) {
             "Force MFA": true
           },
           user: insertedUser.insertedId
-    })
+        }
+      })
     return NextResponse.json({ message: "User registered." }, { status: 201 });
   } catch (error) {
     return NextResponse.json(

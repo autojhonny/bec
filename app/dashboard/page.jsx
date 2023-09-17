@@ -1,11 +1,11 @@
 import UserInfo from "@/components/UserInfo";
 import PostData from "@/components/PostData";
 export default function Dashboard() {
-  return( 
+  return (
     <>
-  <UserInfo />
-  <PostData />
+      <UserInfo />
+      <PostData />
     </>
   )
-  
+
 }

@@ -19,7 +19,6 @@ export default function RootLayout({ children }) {
       <Suspense fallback={<Loading />}>
         <AuthProvider>{children}</AuthProvider>
       </Suspense>
-      <script src="https://unpkg.com/@material-tailwind/html@latest/scripts/tabs.js"></script>
       </body>
     </html>
   );
