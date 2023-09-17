@@ -1,4 +1,4 @@
-import { connectMongoDB } from "@/lib/mongodb";
+import clientPromise from "@/lib/new";
 import User from "@/models/user";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -14,8 +14,11 @@ export const authOptions = {
         const { email, password } = credentials;
 
         try {
-          await connectMongoDB();
-          const user = await User.findOne({ email });
+          const client = await clientPromise
+          const db= client.db('test')
+          const collection= db.collection('users')
+          const user = await collection.findOne({ email });
+    // const user = await User.findOne({ email });
 
           if (!user) {
             return null;

@@ -53,6 +53,7 @@ export default function RegisterForm() {
         form.reset();
         router.push("/");
       } else {
+        setError("User registration failed.");
         console.log("User registration failed.");
       }
     } catch (error) {
